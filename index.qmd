@@ -172,7 +172,7 @@ chart_d
 
     A.  Chart A does an ok job at communicating the percentage of each age group that *has* been vaccinated. That is where its accomplishments end. It doesn't really communicated changes in vaccine rates over time across different age groups. The only "time variable" in the graph is the label that that the totals were summed for the 12 weeks, this isn't appropriate to capture any changes during those 12 weeks. It may be hard for some to understand that the chart isn't saying ~1/3 of people aged over 65 are vaccinated, but it is instead saying that out of all total people vaccinated, 1/3 of those people are aged over 65. 
 
-    B.  Chart B clearly shows the vaccination rate of each age group over 12 weeks. It is simple to notice that at the start of the first week just how low the vaccination rate was for each age group and how the vaccine rate grew over time.
+    B.  Chart B clearly shows the vaccination rate of each age group over 12 weeks. It is simple to notice that at the start of the first week just how low the vaccination rate was for each age group and how the vaccine rate grew over time. One small thing (that doesn't really bother me at all) is that the points on the graph only serve to point out the week, perhaps they could be better used only when an important milestone or event happened to signify that date/week from the rest. 
 
     C.  Chart C may be very confusing to the average person. It can be easy for someone to misinterpret the graph and mistake age group 18-29 to receiving the most vaccines and vice versa for age group 65+. You are supposed to look at the area of each age group, rather than the height, and for that I think it doesn't do a great job showcasing the vaccination rate over time for each age group. 
 
@@ -475,6 +475,8 @@ census_expanded %>%
 
 ### disgusting messy code fold
 
+<!-- This is just to fold my code in R, some of it I need to reuse -->
+
 <!-- We have age groups 50-64, and 65+, but need 18-29 and 30-49. To get these, I will use age group 18-49 and split it. 18-29 covers 12 years (counting 18 as 1) and 30-49 covers 20 (counting 30 as 1), so it can be split proportionally 18-29 = 12/32 = 0.375 of all doses from 18-49. Likewise, 30-49 = 0.625 of all doses from 18-49.  -->
 
 <!-- ```{r} -->
@@ -655,6 +657,7 @@ census_expanded %>%
 
 
 
+
 ## Task 2
 
 2.  Use the real data to generate the plot you created in 6.
@@ -666,10 +669,10 @@ census_expanded %>%
 ```{r}
 vaccination_rate_data %>% 
   filter(year == "2024", sex == "Both") %>% 
-  ggplot(data = ., aes(x = MMWR_Week, y = vaccination_rate, 
+  ggplot(data = ., aes(x = MMWR_Week, y = vaccination_rate,
                        color = age_group, group = age_group)) +
   geom_line(linewidth = 1.2) +
-  geom_point(size = 2.5) +
+  # geom_point(size = 2.5) +
   # scale_color_manual(values = age_colors) +
   scale_x_continuous(breaks = 1:52) +
   labs(title = "Line Graph - Vaccination Rates Over Time",
@@ -686,7 +689,7 @@ vaccination_rate_data %>%
   ggplot(data = ., aes(x = MMWR_Week_Order, y = vaccination_rate, 
                        color = age_group, group = age_group)) +
   geom_line(linewidth = 1.2) +
-  geom_point(size = 2.5) +
+  # geom_point(size = 2.5) +
   # scale_color_manual(values = age_colors) +
   scale_x_continuous(breaks = 1:50) +
   labs(title = "Line Graph - Weekly Vaccination Rates Over Time",
@@ -697,59 +700,8 @@ vaccination_rate_data %>%
        color = "Age Group")
 ```
 
-```{r}
-vaccination_rate_data %>% 
-  filter(sex == "Both") %>% 
-  ggplot(data = ., aes(x = Week_ID, y = vaccination_rate, 
-                       color = age_group, group = age_group)) +
-  geom_line(linewidth = 1.2) +
-  geom_point(size = 2.5) +
-  # scale_color_manual(values = age_colors) +
-  # scale_x_continuous(breaks = 1:(1365/3)) +
-  labs(title = "Weekly Vaccination Rates Over Time for All Genders",
-       subtitle = "From 2023/09/16 - 2024/12/28",
-       tag = "Figure 3.",
-       x = "Date",
-       y = "Weekly Vaccination Rate (%)",
-       color = "Age Group")
-```
+Figure 3 is my favorite so I am going to focus on it.
 
-<!-- ## Line Plot -->
-
-<!-- ```{r} -->
-<!-- vaccination_rate_data %>%  -->
-<!--   filter(year == "2024") %>%  -->
-<!--   ggplot(data = ., aes(x = MMWR_Week, y = vaccination_rate,  -->
-<!--                        color = age_group, group = age_group)) + -->
-<!--   geom_line(linewidth = 1.2) + -->
-<!--   geom_point(size = 2.5) + -->
-<!--   scale_color_manual(values = age_colors) + -->
-<!--   scale_x_continuous(breaks = 1:52) + -->
-<!--   labs(title = "Line Graph - Vaccination Rates Over Time", -->
-<!--        subtitle = "Year = 2024 ", -->
-<!--        tag = "Figure 1.", -->
-<!--        x = "MMWR Week", -->
-<!--        y = "Vaccination Rate (%)", -->
-<!--        color = "Age Group") -->
-<!-- ``` -->
-
-
-<!-- ```{r} -->
-<!-- vaccination_rate_data %>%  -->
-<!--   filter(`COVID-19_Season` == "2023-2024") %>%  -->
-<!--   ggplot(data = ., aes(x = MMWR_Week_Order, y = vaccination_rate,  -->
-<!--                        color = age_group, group = age_group)) + -->
-<!--   geom_line(linewidth = 1.2) + -->
-<!--   geom_point(size = 2.5) + -->
-<!--   scale_color_manual(values = age_colors) + -->
-<!--   scale_x_continuous(breaks = 1:50) + -->
-<!--   labs(title = "Line Graph - Vaccination Rates Over Time", -->
-<!--        subtitle = "2023-2024 COVID-19 Season", -->
-<!--        tag = "Figure 1.", -->
-<!--        x = "MMWR Week Order", -->
-<!--        y = "Vaccination Rate (%)", -->
-<!--        color = "Age Group") -->
-<!-- ``` -->
 
 ## Task 3
 
@@ -757,13 +709,97 @@ vaccination_rate_data %>%
     You may be able to find relevant information about e.g. approval dates of vaccines at [immunize.org's Vaccine Timeline](https://www.immunize.org/vaccines/vaccine-timeline/).
     Add at least one annotation to your chart, but balance utility with clutter.
     
--   ACIP recommends use of an additional updated 2023–2024 COVID-19 vaccine dose for adults aged 65 Years and older. April 25, 2024
+I'd like to find information that may explain the two peaks in Figure 3. They both seem to happen around September. Now, one may assume this could be just because of school beginning, but this data deals with adults, and more importantly the peaks are for people over 65+!
 
--   CDC Recommends Updated 2024-2025 COVID-19 and Flu Vaccines for Fall/Winter Virus Season. June 27, 2024
+From my findings, the information that seems to be the cause of the spikes in the weekly vaccine rate *in 2023*, is not in the range of the data collected :(.
+    
+-   CDC recommends everyone 6 months and older get an updated COVID-19 vaccine. Updated COVID-19 vaccines from Pfizer-BioNTech and Moderna will be available later this week. September 12, 2023
 
--   CDC approves ACIP recommendation for people 65 years and older and those who are moderately or severely immunocompromised to receive a second dose of 2024-2025 COVID-19 vaccine six months after their first dose. October 23, 2024
+-   FDA approves and authorizes emergency use of updated mRNA vaccines (Moderna, Pfizer) for 2023-24. The updated mRNA vaccines are each approved for individuals 12 years of age and older and are authorized under emergency use for individuals 6 months through 11 years of age. Bivalent Moderna and Pfizer-BioNTech COVID-19 vaccines are no longer authorized for use in the United States. September 11, 2023
 
--   ACIP recommends use of additional doses of 2024–2025 COVID-19 vaccine for adults aged 65 Years and older and persons aged 6 Months and older with moderate or severe immunocompromise. December 12, 2024 
+For 2024 however, we have the following info and dates: 
+
+-   ACIP recommends use of the 2024-25 COVID-19 vaccines for persons six months and older. September 10, 2024
+
+-   FDA approved and granted emergency use authorization (EUA) for updated mRNA COVID-19 vaccines (2024-2025 formula) manufactured by Moderna and Pfizer. August 22, 2024
+
+This could be useful, but in 2024, it looks like things starting to pick up very early August.
+
+### Annotation Adding
+
+```{r}
+important_dates <-
+  data.frame(
+    date = 
+      c(
+        'September 11, 2023',
+        # 'September 12, 2023', for a less cluttered graph 
+        # I'll only include one date for each year
+        
+        # 'September 10, 2024',
+        'August 22, 2024'
+      ),
+    label = 
+      c(
+        "CDC: Everyone get updated COVID-19 vaccine*",
+        # 'FDA approves and authorizes emergency use of updated mRNA vaccines (Moderna, Pfizer) for 2023-24. Older vaccinesare no longer authorized for use in the US.',
+        # 'ACIP recommends use of the 2024-25 COVID-19 vaccines for persons six months and older.',
+        'FDA: Granted EUA on new COVID-19 vaccine**'
+      )
+  ) ; important_dates$date <- mdy(important_dates$date)
+```
+
+
+```{r}
+vaccination_rate_data %>% 
+  filter(sex == "Both") %>% 
+  ggplot(
+    data = ., 
+    aes(x = as.Date(Week_ID), 
+        y = vaccination_rate
+        )
+    ) +
+  geom_line(aes(color = age_group, group = age_group), linewidth = 1.2) +
+  
+  
+  geom_vline(
+    data = important_dates, 
+    aes(xintercept = date), 
+    linetype = "dashed",
+    color = "black",
+    linewidth = 0.8,
+    alpha = 0.7
+  ) +
+  geom_text(
+    data = important_dates,
+    aes(x = date,
+        y = 0,
+        label = label),
+    angle = 90,
+    vjust = -1,
+    hjust = -0.2,
+    color = "black",
+    size = 2.4
+  ) +
+  # scale_color_manual(values = age_colors) +
+  scale_x_date(
+    date_breaks = "2 months",
+    date_labels = "%Y-%m-%d"  ) + 
+  labs(title = "Weekly COVID-19 Vaccination Rates From 2023/09/16 - 2024/12/28",
+       # subtitle = "with annotatd",
+       tag = "Figure 3.",
+       x = "Date",
+       y = "Weekly Vaccination Rate (%)",
+       color = "Age Group",
+       caption = "*CDC recommends everyone 6 months and older get an updated COVID-19 vaccine, 2023/09/11.\n **FDA approved and granted emergency use authorization (EUA) for updated mRNA COVID-19 vaccines, 2024/08/22."
+       ) + 
+  theme(
+    axis.text.x = element_text(angle = 20, hjust = 1),
+    plot.caption = element_text(hjust = 0, size = 7)
+  )
+
+```
+
 
 ## Task 4
 
@@ -772,8 +808,11 @@ vaccination_rate_data %>%
     
 First off, I'd need the CDC data for all of 2023. 
 
+I would go about this in two ways:
+  
+-   Make two charts for each age group
+-   Make one chart for each year
 
-    
 ## Task 5
 
 5.  How would you use your statistical training to test and visually highlight any statistically significant differences?
